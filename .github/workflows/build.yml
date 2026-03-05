@@ -16,5 +16,5 @@ jobs:
       - name: Upgrade pip
         run: python -m pip install --upgrade pip
 
-      - name: Build module
+      - name: Install module
         run: pip install .
