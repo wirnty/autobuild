@@ -1,36 +1,17 @@
-name: Install Badge
+name: Install Badge Auto
 
-# Manual trigger
 on:
-  workflow_dispatch:
+  push:
+    branches: [main]
 
 jobs:
   install_check:
     runs-on: ubuntu-latest
-
     steps:
-      # Checkout repo
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      # Setup Python
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-
-      # Upgrade pip
-      - name: Upgrade pip
-        run: python -m pip install --upgrade pip
-
-      # Install module
-      - name: Install module
-        run: pip install .
-
-      # Import check (optional but ensures module is usable)
-      - name: Import module
-        run: python -c "import autobuilding"
-
-      # Success message
-      - name: Done
-        run: echo "Module installed successfully!"
+      - run: python -m pip install --upgrade pip
+      - run: pip install .
+      - run: python -c "import autobuilding"
