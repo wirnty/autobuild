@@ -1,1 +1,0 @@
-MIT License set as default license, please follow the license as well, you need to read documentary for understanding something.
