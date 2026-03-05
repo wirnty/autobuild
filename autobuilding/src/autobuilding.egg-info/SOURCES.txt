@@ -1,0 +1,6 @@
+pyproject.toml
+src/autobuilding/__init__.py
+src/autobuilding.egg-info/PKG-INFO
+src/autobuilding.egg-info/SOURCES.txt
+src/autobuilding.egg-info/dependency_links.txt
+src/autobuilding.egg-info/top_level.txt
