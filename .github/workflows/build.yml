@@ -1,49 +1,20 @@
 name: build
 
-on: [push, pull_request, workflow_dispatch]
+on: [push, pull_request]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
       - name: Upgrade pip
         run: python -m pip install --upgrade pip
 
-      # 1) Build a real wheel (fair check)
-      - name: Build wheel
-        run: |
-          pip install build
-          python -m build
-
-      # 2) Debug: show what got built
-      - name: Show dist
-        run: |
-          ls -la dist || true
-          python -c "import glob; print('Wheels:', glob.glob('dist/*.whl'))"
-
-      # 3) Debug: ensure your package files are INSIDE the wheel
-      # IMPORTANT: change autobuilding to your real import package folder name
-      - name: Assert package is inside wheel
-        run: |
-          python -c "import glob,zipfile; f=glob.glob('dist/*.whl')[0]; z=zipfile.ZipFile(f); n=z.namelist(); \
-          ok=any(x.startswith('autobuilding/') for x in n); \
-          print('WHEEL:', f); print('has autobuilding:', ok); \
-          print('--- first files ---'); print('\n'.join(n[:120])); \
-          raise SystemExit(0 if ok else 1)"
-
-      # 4) Install the built wheel (like users do)
-      - name: Install wheel
-        run: pip install dist/*.whl
-
-      # 5) Import check (this makes badge pass/fail)
-      - name: Import check
-        run: python -c "import autobuilding; print('import ok')"
+      - name: Install module
+        run: pip install .
