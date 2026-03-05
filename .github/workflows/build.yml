@@ -1,20 +1,43 @@
 name: build
 
-on: [push, pull_request]
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v5
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
       - name: Upgrade pip
         run: python -m pip install --upgrade pip
 
-      - name: Install module
+      # 1) Build sdist + wheel
+      - name: Build package
+        run: |
+          pip install build
+          python -m build
+
+      # 2) Install from wheel (most "fair" check)
+      - name: Install wheel
+        run: pip install dist/*.whl
+
+      # 3) Import check (CHANGE THIS)
+      - name: Import check
+        run: python -c "import autobuilding"
+
+      # 4) Also verify editable/source install works
+      - name: Install from source
         run: pip install .
+
+      - name: Import check (source install)
+        run: python -c "import autobuilding"
